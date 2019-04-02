@@ -359,28 +359,61 @@ height:50vh;
     
     
     <article class="index-post">
-        <a class="abstract-title" href="/2019/01/01/test/">
+        <a class="abstract-title" href="/2019/04/02/h264analysis/">
             
-                <span>测试文章</span>
+                <span>h264结构分析</span>
         </a>
         <div class="abstract-content">
-            I Can Eat GlassAnd from the sublime to the ridiculous, here is a certain phrase in an assortment of languages:
+            h264结构分析h264码流分层结构的疑惑在音视频领域，h264可以说是运用非常广泛。网上能找到的关于h264的资料冗杂，最近因为工作原因需要实时推流一段h264裸流。根据测试发现，有些流没有相关的帧率信息，在使用gstreamer向kurento推流的时候出现错乱的问题等。当本地使用ffmpeg重新编码后再推流则正常。
+为了debug，借此契机做一下h264的码流结构分析。下图是网上随处可见的码流分层结构。看到这个图肯定会有几个疑问
 
-Sanskrit: ﻿काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥
-Sanskrit (standard transcription): kācaṃ śaknomyattum; nopahinasti mām.
-Classical Greek: ὕαλον ϕαγεῖν δύναμαι· τοῦτο οὔ με βλάπτει.
-Gr...
+mediainfo读出的相关信息存在什么地方  直达解答
+帧在这个图里位于哪个层次  太长不看
+
+
+根据以上问题我们来找一些具体的例子看看
+一个简单序列...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/01</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/04/02</span>
             </div>
             <!-- tags  -->
             
             <div class="abstract-tags">
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="test">test</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="实时音视频">实时音视频</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href="/2018/10/15/monkeylearniic/">
+            
+                <span>猴子也能懂的iic裸板程序</span>
+        </a>
+        <div class="abstract-content">
+            iic裸机程序运行机制本文代码适用于AT24cxx平台E2PROM
+使用I2C实现的AT24cxx系列的读写函数读操作12345678910unsigned char at24cxx_read(unsigned char address)&#123;	unsigned char val;	printf("at24cxx_read address = %d\r\n", address);    i2c_write(0xA0, &amp;address, 1);	printf("at24cxx_read send address ok\r\n");    i2c_read(0xA0, (un...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/10/15</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="猴子也能懂的系列">猴子也能懂的系列</a>
     
 </div>
             
@@ -589,9 +622,16 @@ Gr...
     
     
     
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 1
+        Total : 2
         </div>
         <!-- search  -->
         
@@ -607,13 +647,31 @@ Gr...
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/01</span><a class="archive-post-title" href="/2019/01/01/test/">测试文章</a>
+            <span class="archive-post-date">04/02</span><a class="archive-post-title" href="/2019/04/02/h264analysis/">h264结构分析</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/15</span><a class="archive-post-title" href="/2018/10/15/monkeylearniic/">猴子也能懂的iic裸板程序</a>
         </li>
     
     </ul></div>
   </div>
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="猴子也能懂的系列"><span class="iconfont-archer">&#xe606;</span>猴子也能懂的系列</span>
+    
+        <span class="sidebar-tag-name" data-tags="实时音视频"><span class="iconfont-archer">&#xe606;</span>实时音视频</span>
     
         <span class="sidebar-tag-name" data-tags="test"><span class="iconfont-archer">&#xe606;</span>test</span>
     
