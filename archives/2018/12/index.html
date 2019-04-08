@@ -78,6 +78,8 @@
     <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
     
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -201,10 +203,8 @@
 </head>
 
     
-        <body class="home-body">
     
-    
-<header class="header index-header">
+<header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
@@ -220,34 +220,21 @@
 
 
 
-
-height:50vh;
 ">
     
     <!-- 主页  -->
-    
-    
-    <!-- 文章页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/index-bg-my.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Little Deamon.
-            <!-- 文章页  -->
-            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
-            
-            
-                可 远 观 而 不 可 亵 玩
-            
-            <!-- 文章页  -->
             
         </p>
         <!-- 文章页meta -->
@@ -359,78 +346,6 @@ height:50vh;
     
     
     <article class="index-post">
-        <a class="abstract-title" href="/2019/04/05/gst-launch/">
-            
-                <span>gstreamer-RTP测试脚本</span>
-        </a>
-        <div class="abstract-content">
-            kurento提供了一组测试RTP的client应用。里面提供了一组gstreamer的脚本。因为推流的逻辑差不多所以就拿来魔改了一下。主要是增加视频本地播放功能验证pipeline传输是否正常。
-need to do：
-解析h264裸流
-去掉音频传输
-增加本地同步播放
-
-123456789101112131415161718192021PEER_A=&#123;KMS_AUDIO_PORT&#125; PEER_V=&#123;KMS_VIDEO_PORT&#125; PEER_IP=&#123;KMS_PUBLIC_IP&#125; \SELF_PATH=&quot;&#123;PA...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/04/05</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="实时音视频">实时音视频</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2019/04/02/h264analysis/">
-            
-                <span>h264结构分析</span>
-        </a>
-        <div class="abstract-content">
-            h264结构分析h264码流分层结构的疑惑在音视频领域，h264可以说是运用非常广泛。网上能找到的关于h264的资料冗杂，最近因为工作原因需要实时推流一段h264裸流。根据测试发现，有些流没有相关的帧率信息，在使用gstreamer向kurento推流的时候出现错乱的问题等。当本地使用ffmpeg重新编码后再推流则正常。
-为了debug，借此契机做一下h264的码流结构分析。下图是网上随处可见的码流分层结构。看到这个图肯定会有几个疑问
-
-mediainfo读出的相关信息存在什么地方  直达解答
-帧在这个图里位于哪个层次  太长不看
-
-
-根据以上问题我们来找一些具体的例子看看
-一个简单序列...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/04/02</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="实时音视频">实时音视频</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
         <a class="abstract-title" href="/2018/12/23/SkillTree/">
             
                 <span class="stick-top iconfont-archer">&#xe63d;</span>
@@ -456,126 +371,10 @@ mediainfo读出的相关信息存在什么地方  直达解答
         </div>
     </article>
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2018/10/15/monkeylearniic/">
-            
-                <span>猴子也能懂的iic裸板程序</span>
-        </a>
-        <div class="abstract-content">
-            iic裸机程序运行机制本文代码适用于AT24cxx平台E2PROM
-使用I2C实现的AT24cxx系列的读写函数读操作12345678910unsigned char at24cxx_read(unsigned char address)&#123;	unsigned char val;	printf("at24cxx_read address = %d\r\n", address);    i2c_write(0xA0, &amp;address, 1);	printf("at24cxx_read send address ok\r\n");    i2c_read(0xA0, (un...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/10/15</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class="abstract-tags">
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="猴子也能懂的系列">猴子也能懂的系列</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
     <!-- paginator  -->
     
 </main>
             <!-- profile -->
-            
-            <div class="profile">
-    <img class="profile-avatar" alt="avatar" src="/avatar/Tina.jpg">
-    <div class="profile-name">Rukia Alice</div>
-    
-    <div class="profile-signature">
-        小守护进程
-    </div>
-    
-    
-    <div class="profile-social">
-        
-    
-        
-            
-                <a href="mailto:steven_xu98@163.com" class="iconfont-archer email" title="email"></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/stevenxu98" class="iconfont-archer github" target="_blank" title="github"></a>
-            
-        
-    
-        
-            
-                <span class="iconfont-archer wechat" title="wechat">
-                  
-                  <img class="profile-qr" src="/assets/my_qr.png">
-                </span>
-            
-        
-    
-        
-    
-        
-            
-                <a href="https://telegram.me/RXCPAlice" class="iconfont-archer telegram" target="_blank" title="telegram"></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-            
-                <a href="https://space.bilibili.com/2175426" class="iconfont-archer bilibili" target="_blank" title="bilibili"></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-    </div>
-    
-    
-    
-        <div class="about-me">
-            <a href="/about">ABOUT ME</a>
-        </div>
-    
-</div>
             
         </div>
         <footer class="footer footer-unloaded">

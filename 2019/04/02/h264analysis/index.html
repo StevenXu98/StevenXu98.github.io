@@ -432,11 +432,11 @@ height:50vh;
 <blockquote>
 <p>SPS即Sequence Paramater Set，又称作序列参数集。SPS中保存了一组编码视频序列(Coded video sequence)的全局参数。所谓的编码视频序列即原始视频的一帧一帧的像素数据经过编码之后的结构组成的序列。而每一帧的编码后数据所依赖的参数保存于图像参数集中。一般情况SPS的NAL Unit通常位于整个码流的起始位置。</p>
 </blockquote>
-<h2 id="从整体看这段码流"><a href="#从整体看这段码流" class="headerlink" title="从整体看这段码流"></a>从整体看这段码流</h2><p>刚刚那张截图的info中拉到最下是P Slice #188，我们这个视频是189帧。那么188加上第一个I帧正好是189帧。接触过视频技术的人应该都不陌生I帧P帧和B帧。但与h264相关的概念经常提到的是I/P/B 切片(Slice)。根据对这个裸流的分析，我们不难猜测：在这个裸流中一个NALU（NAL 单元）对应的是一帧，每一个单元只有一个切片。</p>
+<h2 id="从整体看这段码流"><a href="#从整体看这段码流" class="headerlink" title="从整体看这段码流"></a>从整体看这段码流</h2><p><a name="answer2"></a><br>刚刚那张截图的info中拉到最下是P Slice #188，我们这个视频是189帧。那么188加上第一个I帧正好是189帧。接触过视频技术的人应该都不陌生I帧P帧和B帧。但与h264相关的概念经常提到的是I/P/B 切片(Slice)。根据对这个裸流的分析，我们不难猜测：在这个裸流中一个NALU（NAL 单元）对应的是一帧，每一个单元只有一个切片。</p>
 <blockquote>
 <p>如果<strong>不采用FMO（灵活宏块排序）</strong> 机制，则<strong>一幅图像只有一个片组</strong>；<br>如果<strong>不使用多个片，则一个片组只有一个片</strong>；<br>如果<strong>不采用</strong>DP（<strong>数据分割</strong>）机制，则<strong>一个片就是一个NALU</strong>，<strong>一个 NALU 也就是一个片</strong>。</p>
 </blockquote>
-<p>我认为这三条解决和很多人对于帧和NALU关系的疑惑。<a name="answer2"></a></p>
+<p>我认为这三条解决和很多人对于帧和NALU关系的疑惑。</p>
 <p>对于h264很多人推荐淡化帧的概念，将NALU作为一个基本的单元。在这里如果按照上面的理解，之后就可以不用太纠结帧的问题了。</p>
 <h2 id="再看I-IDR，P，B切片"><a href="#再看I-IDR，P，B切片" class="headerlink" title="再看I/IDR，P，B切片"></a>再看I/IDR，P，B切片</h2><p>虽然很多博客和视频都提到过这个，但为了内容完整性在这里引用一段曾经看到过的博文</p>
 <blockquote>
@@ -468,7 +468,7 @@ height:50vh;
             <p>原文作者：<a href="http://swapx.space">Rukia Alice</a>
             </p><p>原文链接：<a href="http://swapx.space/2019/04/02/h264analysis/">http://swapx.space/2019/04/02/h264analysis/</a>
             </p><p>发表日期：<a href="http://swapx.space/2019/04/02/h264analysis/">April 2nd 2019, 10:02:55 pm</a>
-            </p><p>更新日期：<a href="http://swapx.space/2019/04/02/h264analysis/">April 8th 2019, 8:08:07 pm</a>
+            </p><p>更新日期：<a href="http://swapx.space/2019/04/02/h264analysis/">April 8th 2019, 9:22:23 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -485,8 +485,8 @@ height:50vh;
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href="/2018/10/15/monkeylearniic/" title="猴子也能懂的iic裸板程序">
-                    <div class="prevTitle">猴子也能懂的iic裸板程序</div>
+                <a href="/2018/12/23/SkillTree/" title="技能树">
+                    <div class="prevTitle">技能树</div>
                 </a>
             
         </li>
@@ -668,9 +668,18 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 3
+        Total : 4
         </div>
         <!-- search  -->
         
@@ -702,6 +711,11 @@ top:50vh;
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/23</span><a class="archive-post-title" href="/2018/12/23/SkillTree/">技能树</a>
+        </li>
     
     
         <li class="archive-post-item">
