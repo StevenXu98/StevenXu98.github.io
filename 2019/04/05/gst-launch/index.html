@@ -22,7 +22,7 @@
     <meta name="description" content>
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>h264结构分析 · Little Deamon&#39;s blog</title>
+    <title>gstreamer-RTP测试脚本 · Little Deamon&#39;s blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Little Deamon.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">h264结构分析</a>
+                <a href="#" class="post-name">gstreamer-RTP测试脚本</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            h264结构分析
+            gstreamer-RTP测试脚本
             <!-- 404 -->
             
         </h1>
@@ -272,12 +272,12 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">2.4k</span>阅读时长: <span class="post-count reading-time">8 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">941</span>阅读时长: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2019/04/02</span>
+                    <span class="post-intro-time">2019/04/05</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -401,74 +401,43 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="h264结构分析"><a href="#h264结构分析" class="headerlink" title="h264结构分析"></a>h264结构分析</h1><h2 id="h264码流分层结构的疑惑"><a href="#h264码流分层结构的疑惑" class="headerlink" title="h264码流分层结构的疑惑"></a>h264码流分层结构的疑惑</h2><p>在音视频领域，h264可以说是运用非常广泛。网上能找到的关于h264的资料冗杂，最近因为工作原因需要实时推流一段h264裸流。根据测试发现，有些流没有相关的帧率信息，在使用gstreamer向kurento推流的时候出现错乱的问题等。当本地使用ffmpeg重新编码后再推流则正常。</p>
-<p>为了debug，借此契机做一下h264的码流结构分析。下图是网上随处可见的码流分层结构。看到这个图肯定会有几个疑问</p>
-<ol>
-<li>mediainfo读出的相关信息存在什么地方  <a href="#answer1">直达解答</a></li>
-<li>帧在这个图里位于哪个层次  <a href="#answer2">太长不看</a></li>
+        <p>kurento提供了一组测试RTP的client应用。里面提供了一组gstreamer的脚本。因为推流的逻辑差不多所以就拿来魔改了一下。主要是增加视频本地播放功能验证pipeline传输是否正常。</p>
+<h3 id="need-to-do："><a href="#need-to-do：" class="headerlink" title="need to do："></a>need to do：</h3><ol>
+<li>解析h264裸流</li>
+<li>去掉音频传输</li>
+<li>增加本地同步播放</li>
 </ol>
-<p><img src="https://i.loli.net/2019/04/02/5ca2f701981ad.png" alt></p>
-<p>根据以上问题我们来找一些具体的例子看看</p>
-<h2 id="一个简单序列的码流"><a href="#一个简单序列的码流" class="headerlink" title="一个简单序列的码流"></a>一个简单序列的码流</h2><p>一个h264裸流是的组成由大到小是：序列、图像（大多时候称为帧，包括I,P,B帧）、片组、片（包括I,P,B片，SP片，SI片）、NALU、宏块、亚宏块、块、像素。</p>
-<p><img src="https://i.loli.net/2019/04/02/5ca2fa35cd769.png" alt></p>
-<p>（上图工具<a href="https://github.com/latelee/H264BSAnalyzer" target="_blank" rel="noopener">https://github.com/latelee/H264BSAnalyzer</a> ，改进于雷神亲笔的开源工具，雷神斯人已逝，精神长存！）</p>
-<p>先看第一个字段，长度为28，type为sps。<br><img src="https://i.loli.net/2019/04/02/5ca307de46c80.png" alt><br><img src="https://i.loli.net/2019/04/02/5ca307de3dcee.png" alt></p>
-<p>我们现在打开的是一个NALU单元。一个NALU单元由NALU header和NALU的主体构成。NALU但全的前8位就是NALU header。</p>
-<ul>
-<li>forbidden_zero_bit  在 H.264 规范中规定了这一位必须为 0。</li>
-<li>nal_ref_idc，决定了这个NALU的重要性，为0的时候解码器可以考虑丢弃。像此处为3，说明该sps单元为重要性高的单元</li>
-<li>nal_unit_type，其中，nal_unit_type为1， 2， 3， 4， 5的NAL单元称为VCL的NAL单元，其他类型的NAL单元为非VCL的NAL单元</li>
-</ul>
-<blockquote>
-<p>NAL全称Network Abstract Layer，即网络抽象层。在H.264/AVC视频编码标准中，整个系统框架被分为了两个层面：<strong>视频编码层面（VCL）</strong>和<strong>网络抽象层面（NAL）</strong>。其中，前者负责<strong>有效表示视频数据的内容</strong>，而后者则负责<strong>格式化数据并提供头信息</strong>，以保证数据适合各种信道和存储介质上的传输。NAL单元是NAL的基本语法结构，它包含一个字节的头信息和一系列来自VCL的称为原始字节序列载荷（RBSP）的字节流。</p>
-</blockquote>
-<ul>
-<li>profile_idc  level_idc  指明所用  profile、level </li>
-</ul>
-<p>下面还有非常多的内容，在很多sps的分析博客中都有写所以我们暂时不谈，重点关注一下我们之前提到的mediainfo没有帧率相关的问题。</p>
-<p>补充：<a href="https://zhuanlan.zhihu.com/p/27896239" target="_blank" rel="noopener">H264码流中SPS PPS详解</a> 对sps和pps进行了详细解释</p>
-<p><a name="answer1"></a><br>对比了成功推流和推流失败的两个视频的sps后，我们可以发现区别在最后的vui_parameters_present_flag字段。在推流成功的视频的sps中，这个flag为1。然后我们可以在字段中找到num_units_in_tick和time_scale的字段。用这两个做一个除法，即sps-&gt;time_scale / sps-&gt;num_units_in_tick就能的到我们的答案。</p>
-<p>我们最终可以引出</p>
-<blockquote>
-<p>SPS即Sequence Paramater Set，又称作序列参数集。SPS中保存了一组编码视频序列(Coded video sequence)的全局参数。所谓的编码视频序列即原始视频的一帧一帧的像素数据经过编码之后的结构组成的序列。而每一帧的编码后数据所依赖的参数保存于图像参数集中。一般情况SPS的NAL Unit通常位于整个码流的起始位置。</p>
-</blockquote>
-<h2 id="从整体看这段码流"><a href="#从整体看这段码流" class="headerlink" title="从整体看这段码流"></a>从整体看这段码流</h2><p>刚刚那张截图的info中拉到最下是P Slice #188，我们这个视频是189帧。那么188加上第一个I帧正好是189帧。接触过视频技术的人应该都不陌生I帧P帧和B帧。但与h264相关的概念经常提到的是I/P/B 切片(Slice)。根据对这个裸流的分析，我们不难猜测：在这个裸流中一个NALU（NAL 单元）对应的是一帧，每一个单元只有一个切片。</p>
-<blockquote>
-<p>如果<strong>不采用FMO（灵活宏块排序）</strong> 机制，则<strong>一幅图像只有一个片组</strong>；<br>如果<strong>不使用多个片，则一个片组只有一个片</strong>；<br>如果<strong>不采用</strong>DP（<strong>数据分割</strong>）机制，则<strong>一个片就是一个NALU</strong>，<strong>一个 NALU 也就是一个片</strong>。</p>
-</blockquote>
-<p>我认为这三条解决和很多人对于帧和NALU关系的疑惑。<a name="answer2"></a></p>
-<p>对于h264很多人推荐淡化帧的概念，将NALU作为一个基本的单元。在这里如果按照上面的理解，之后就可以不用太纠结帧的问题了。</p>
-<h2 id="再看I-IDR，P，B切片"><a href="#再看I-IDR，P，B切片" class="headerlink" title="再看I/IDR，P，B切片"></a>再看I/IDR，P，B切片</h2><p>虽然很多博客和视频都提到过这个，但为了内容完整性在这里引用一段曾经看到过的博文</p>
-<blockquote>
-<p>IDR（Instantaneous Decoding Refresh）–即时解码刷新。 </p>
-<p><strong>I帧:帧内编码帧</strong>是一种自带全部信息的独立帧，无需参考其它图像便可独立进行解码，视频序列中的第一个帧始终都是I帧。 </p>
-<p>I和IDR帧都是使用帧内预测的。<strong>它们都是同一个东西而已</strong>,<strong>在编码和解码中为了方便，要首个I帧和其他I帧区别开，</strong>所以才把第一个首个I帧叫IDR**，这样就方便控制编码和解码流程。 IDR帧的作用是立刻刷新,使错误不致传播,从IDR帧开始,重新算一个新的序列开始编码。而I帧不具有随机访问的能力，这个功能是由IDR承担。 IDR会导致DPB（DecodedPictureBuffer 参考帧列表——这是关键所在）清空，而I不会。IDR图像一定是I图像，但I图像不一定是IDR图像。一个序列中可以有很多的I图像，I图像之后的图像可以引用I图像之间的图像做运动参考。一个序列中可以有很多的I图像，I图像之后的图象可以引用I图像之间的图像做运动参考。 </p>
-<p>对于IDR帧来说，在IDR帧之后的所有帧都不能引用任何IDR帧之前的帧的内容，与此相反，对于普通的I-帧来说，位于其之后的B-和P-帧可以引用位于普通I-帧之前的I-帧。从随机存取的视频流中，播放器永远可以从一个IDR帧播放，因为在它之后没有任何帧引用之前的帧。但是，不能在一个没有IDR帧的视频中从任意点开始播放，因为后面的帧总是会引用前面的帧 。</p>
-<p>收到 IDR 帧时，解码器另外需要做的工作就是：把所有的 PPS 和 SPS 参数进行更新。</p>
-<p>对IDR帧的处理(与I帧的处理相同)：(1) 进行帧内预测，决定所采用的帧内预测模式。(2) 像素值减去预测值，得到残差。(3) 对残差进行变换和量化。(4) 变长编码和算术编码。(5) 重构图像并滤波，得到的图像作为其它帧的参考帧。</p>
-<p>多参考帧情况下，  举个例子 ：有如下帧序列： IPPPP <strong>I</strong> <strong>P</strong> PPP ……。按照 3 个参考帧编码。</p>
-<p>因为“按照 3 个参考帧编码”，所以参考帧队列长度为 3 。</p>
-<p>遇到绿色的 I 时，并不清空参考帧队列，把这个 I 帧加入参考帧队列（当然 I 编码时不用参考帧。）。再检测到红色的 P 帧时，用到的就是 PPI 三帧做参考了。</p>
-<p><strong>P帧:前向预测编码帧</strong></p>
-<p>在针对连续动态图像编码时，将连续若干幅图像分成P,B,I三种类型，P帧由在它前面的P帧或者I帧预测而来，它比较与它前面的P帧或者I帧之间的相同信息或数据，也即考虑运动的特性进行帧间压缩。P帧法是根据本帧与相邻的前一帧（I帧或P帧）的不同点来压缩本帧数据。采取P帧和I帧联合压缩的方法可达到更高的压缩且无明显的压缩痕迹。</p>
-<p>P帧的预测与重构:P帧是以I帧为参考帧，在I帧中找出P帧“某点”预测值和运动矢量，取预测差值和运动矢量一起传送。在接收端根据运动矢量从I帧中找出P帧“某点”的预测值并与差值相加以得到P帧某点样值，从而可得到完整的P帧。</p>
-<p>有的视频序列比较简单，就没有B帧，</p>
-<p><strong>B帧：双向预测内插编码帧</strong></p>
-<p>B帧的预测与重构</p>
-<p>B帧法是双向预测的帧间压缩算法。当把一帧压缩成B帧时，它根据相邻的前一帧、本帧以及后一帧数据的不同点来压缩本帧，也即仅记录本帧与前后帧的差值。只有采用B帧压缩才能达到200：1的高压缩。</p>
-<p>B帧是以前面的I或P帧和后面的P帧为参考帧，找出B帧“某点”的预测值和两个运动矢量，并取预测差值和运动矢量传送。接收端根据运动矢量在两个参考帧中。</p>
-<p>原文出处：<a href="https://blog.csdn.net/sphone89/article/details/8086071" target="_blank" rel="noopener">https://blog.csdn.net/sphone89/article/details/8086071</a></p>
-</blockquote>
-<p>自此，前三层应该已经基本清晰，因为涉及到项目的bug似乎只停留到了这个层面。再往下的宏块，子块，ycbcr这些有机会再来补充完整</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PEER_A=&#123;KMS_AUDIO_PORT&#125; PEER_V=&#123;KMS_VIDEO_PORT&#125; PEER_IP=&#123;KMS_PUBLIC_IP&#125; \</span><br><span class="line">SELF_PATH=&quot;&#123;PATH_TO_VIDEO_FILE&#125;&quot; \</span><br><span class="line">SELF_A=5006 SELF_ASSRC=445566 \</span><br><span class="line">SELF_V=5004 SELF_VSSRC=112233 \</span><br><span class="line">bash -c &apos;gst-launch-1.0 -e \</span><br><span class="line">  rtpbin name=r sdes=&quot;application/x-rtp-source-sdes,cname=(string)\&quot;user\@example.com\&quot;&quot; \</span><br><span class="line">  filesrc location=&quot;$SELF_PATH&quot; ! decodebin name=d \</span><br><span class="line">  d. ! queue ! audioconvert ! opusenc \</span><br><span class="line">    ! rtpopuspay ! &quot;application/x-rtp,payload=(int)96,clock-rate=(int)48000,ssrc=(uint)$SELF_ASSRC&quot; \</span><br><span class="line">    ! r.send_rtp_sink_0 \</span><br><span class="line">  d. ! queue ! videoconvert ! x264enc tune=zerolatency \</span><br><span class="line">    ! rtph264pay ! &quot;application/x-rtp,payload=(int)103,clock-rate=(int)90000,ssrc=(uint)$SELF_VSSRC&quot; \</span><br><span class="line">    ! r.send_rtp_sink_1 \</span><br><span class="line">  r.send_rtp_src_0 ! udpsink host=$PEER_IP port=$PEER_A bind-port=$SELF_A \</span><br><span class="line">  r.send_rtcp_src_0 ! udpsink host=$PEER_IP port=$((PEER_A+1)) bind-port=$((SELF_A+1)) sync=false async=false \</span><br><span class="line">  udpsrc port=$((SELF_A+1)) ! r.recv_rtcp_sink_0 \</span><br><span class="line">  r.send_rtp_src_1 ! udpsink host=$PEER_IP port=$PEER_V bind-port=$SELF_V \</span><br><span class="line">  r.send_rtcp_src_1 ! udpsink host=$PEER_IP port=$((PEER_V+1)) bind-port=$((SELF_V+1)) sync=false async=false \</span><br><span class="line">  udpsrc port=$((SELF_V+1)) ! tee name=t \</span><br><span class="line">    t. ! queue ! r.recv_rtcp_sink_1 \</span><br><span class="line">    t. ! queue ! fakesink dump=true async=false&apos;</span><br></pre></td></tr></table></figure>
+<p>这是原本的脚本，基于gst-launch，感叹号左右连接的是两个element，反斜杠是换行符号，没有别的特殊意义。</p>
+<h3 id="h264解析与去除音频通道"><a href="#h264解析与去除音频通道" class="headerlink" title="h264解析与去除音频通道"></a>h264解析与去除音频通道</h3><p>我们不再需要decodebin，而是需要一个h264parse来解析h264裸流。所以相应去掉的还有decodebin连接的queue以及后面的音频通道。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PEER_V=&#123;KMS_VIDEO_PORT&#125; PEER_IP=&#123;KMS_PUBLIC_IP&#125; \</span><br><span class="line">SELF_PATH=&quot;&#123;PATH_TO_VIDEO_FILE&#125;&quot; \</span><br><span class="line">SELF_A=5006 SELF_ASSRC=445566 \</span><br><span class="line">SELF_V=5004 SELF_VSSRC=112233 \</span><br><span class="line">bash -c &apos;gst-launch-1.5 -e \</span><br><span class="line">  rtpbin name=r sdes=&quot;application/x-rtp-source-sdes,cname=(string)\&quot;user\@example.com\&quot;&quot; \</span><br><span class="line">  filesrc location=&quot;$SELF_PATH&quot; ! h264parse \</span><br><span class="line">    ! rtph264pay ! &quot;application/x-rtp,payload=(int)103,clock-rate=(int)90000,ssrc=(uint)$SELF_VSSRC&quot; \</span><br><span class="line">    ! r.send_rtp_sink_0 \</span><br><span class="line">  r.send_rtp_src_0 ! udpsink host=$PEER_IP port=$PEER_V bind-port=$SELF_V \</span><br><span class="line">  r.send_rtcp_src_0 ! udpsink host=$PEER_IP port=$((PEER_V+1)) bind-port=$((SELF_V+1)) sync=false async=false \</span><br><span class="line">  udpsrc port=$((SELF_V+1)) ! tee name=t \</span><br><span class="line">    t. ! queue ! r.recv_rtcp_sink_1 \</span><br><span class="line">    t. ! queue ! fakesink dump=true async=false&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="本地同步播放"><a href="#本地同步播放" class="headerlink" title="本地同步播放"></a>本地同步播放</h3><p>使用gstreamer的tee插件，新建本地的播放通道</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">PEER_V=&#123;KMS_VIDEO_PORT&#125; PEER_IP=&#123;KMS_PUBLIC_IP&#125; \</span><br><span class="line">SELF_PATH=&quot;&#123;PATH_TO_VIDEO_FILE&#125;&quot; \</span><br><span class="line">SELF_A=5006 SELF_ASSRC=445566 \</span><br><span class="line">SELF_V=5004 SELF_VSSRC=112233 \</span><br><span class="line">bash -c &apos;gst-launch-1.5 -e \</span><br><span class="line">  rtpbin name=r \</span><br><span class="line">  filesrc location=&quot;$SELF_PATH&quot; ! h264parse \</span><br><span class="line">    ! rtph264pay ! &quot;application/x-rtp,payload=(int)103,clock-rate=(int)90000,ssrc=(uint)$SELF_VSSRC&quot; \</span><br><span class="line">    ! tee name=echo \</span><br><span class="line">    echo. ! queue ! r.send_rtp_sink_0 \</span><br><span class="line">  r.send_rtp_src_0 ! udpsink host=$PEER_IP port=$PEER_V bind-port=$SELF_V \</span><br><span class="line">  r.send_rtcp_src_0 ! udpsink host=$PEER_IP port=$((PEER_V+1)) bind-port=$((SELF_V+1)) sync=false async=false \</span><br><span class="line">  udpsrc port=$((SELF_V+1)) ! tee name=t \</span><br><span class="line">    t. ! queue ! r.recv_rtcp_sink_1 \</span><br><span class="line">    t. ! queue ! fakesink dump=true async=false \</span><br><span class="line">    echo. ! queue ! rtph264depay ! capsfilter caps=&quot;video/x-h264&quot; ! h264parse ! avdec_h264 \</span><br><span class="line">    ! videoconvert ! videoscale ! video/x-raw ! ximagesink &apos;</span><br></pre></td></tr></table></figure>
+<h3 id="最终实现效果"><a href="#最终实现效果" class="headerlink" title="最终实现效果"></a>最终实现效果</h3><p><img src="https://i.loli.net/2019/04/04/5ca563ef472de.png" alt></p>
+<h3 id="可视化gstreamer-pipeline"><a href="#可视化gstreamer-pipeline" class="headerlink" title="可视化gstreamer pipeline"></a>可视化gstreamer pipeline</h3><p>我们尝尝需要将pipeline可视化来方便调试和 (写文档 ，gstreamer提供了这个功能可供我们直接使用<br>需要做的也是三步</p>
+<ol>
+<li><p>在脚本目录下新建dot文件夹</p>
+</li>
+<li><p>设置环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GST_DEBUG_DUMP_DOT_DIR=./dot</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行脚本的时候在gstreamer前加上 GST_DEBUG_DUMP_DOT_DIR=./dot，我们可以整合到我们的脚本中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">PEER_V=&#123;KMS_VIDEO_PORT&#125; PEER_IP=&#123;KMS_PUBLIC_IP&#125; \</span><br><span class="line">SELF_PATH=&quot;&#123;PATH_TO_VIDEO_FILE&#125;&quot; \</span><br><span class="line">SELF_A=5006 SELF_ASSRC=445566 \</span><br><span class="line">SELF_V=5004 SELF_VSSRC=112233 \</span><br><span class="line">bash -c &apos;GST_DEBUG_DUMP_DOT_DIR=./dot gst-launch-1.5 -e \</span><br><span class="line">  rtpbin name=r \</span><br><span class="line">  filesrc location=&quot;$SELF_PATH&quot; ! h264parse \</span><br><span class="line">    ! rtph264pay ! &quot;application/x-rtp,payload=(int)103,clock-rate=(int)90000,ssrc=(uint)$SELF_VSSRC&quot; \</span><br><span class="line">    ! tee name=echo \</span><br><span class="line">    echo. ! queue ! r.send_rtp_sink_0 \</span><br><span class="line">  r.send_rtp_src_0 ! udpsink host=$PEER_IP port=$PEER_V bind-port=$SELF_V \</span><br><span class="line">  r.send_rtcp_src_0 ! udpsink host=$PEER_IP port=$((PEER_V+1)) bind-port=$((SELF_V+1)) sync=false async=false \</span><br><span class="line">  udpsrc port=$((SELF_V+1)) ! tee name=t \</span><br><span class="line">    t. ! queue ! r.recv_rtcp_sink_1 \</span><br><span class="line">    t. ! queue ! fakesink dump=true async=false \</span><br><span class="line">    echo. ! queue ! rtph264depay ! capsfilter caps=&quot;video/x-h264&quot; ! h264parse ! avdec_h264 \</span><br><span class="line">    ! videoconvert ! videoscale ! video/x-raw ! ximagesink &apos;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>运行脚本后我们可以在dot目录中找到很多dot文件，找到后缀为PAUSED_PLAYING的dot文件，使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dot -Tpng xxxxxxxx-gst-launch.PAUSED_PLAYING.dot &gt; pipeline.png</span><br></pre></td></tr></table></figure>
+<p>将xxxxxxxx-gst-launch.PAUSED_PLAYING.dot输出到pipeline.png，然后看图就好了。下面给一张预览图，因为宽度非常大所以可能看不清，所以自己生成自己的来看吧</p>
+<p><img src="https://i.loli.net/2019/04/04/5ca56b7328406.png" alt></p>
 
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者：<a href="http://swapx.space">Rukia Alice</a>
-            </p><p>原文链接：<a href="http://swapx.space/2019/04/02/h264analysis/">http://swapx.space/2019/04/02/h264analysis/</a>
-            </p><p>发表日期：<a href="http://swapx.space/2019/04/02/h264analysis/">April 2nd 2019, 10:02:55 pm</a>
-            </p><p>更新日期：<a href="http://swapx.space/2019/04/02/h264analysis/">April 8th 2019, 8:08:07 pm</a>
+            </p><p>原文链接：<a href="http://swapx.space/2019/04/05/gst-launch/">http://swapx.space/2019/04/05/gst-launch/</a>
+            </p><p>发表日期：<a href="http://swapx.space/2019/04/05/gst-launch/">April 5th 2019, 9:56:37 am</a>
+            </p><p>更新日期：<a href="http://swapx.space/2019/04/05/gst-launch/">April 8th 2019, 8:10:34 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -476,17 +445,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2019/04/05/gst-launch/" title="gstreamer-RTP测试脚本">
-                    <div class="nextTitle">gstreamer-RTP测试脚本</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href="/2018/10/15/monkeylearniic/" title="猴子也能懂的iic裸板程序">
-                    <div class="prevTitle">猴子也能懂的iic裸板程序</div>
+                <a href="/2019/04/02/h264analysis/" title="h264结构分析">
+                    <div class="prevTitle">h264结构分析</div>
                 </a>
             
         </li>
@@ -628,7 +592,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#h264结构分析"><span class="toc-number">1.</span> <span class="toc-text">h264结构分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#h264码流分层结构的疑惑"><span class="toc-number">1.1.</span> <span class="toc-text">h264码流分层结构的疑惑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个简单序列的码流"><span class="toc-number">1.2.</span> <span class="toc-text">一个简单序列的码流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从整体看这段码流"><span class="toc-number">1.3.</span> <span class="toc-text">从整体看这段码流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#再看I-IDR，P，B切片"><span class="toc-number">1.4.</span> <span class="toc-text">再看I/IDR，P，B切片</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#need-to-do："><span class="toc-number">1.</span> <span class="toc-text">need to do：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#h264解析与去除音频通道"><span class="toc-number">2.</span> <span class="toc-text">h264解析与去除音频通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本地同步播放"><span class="toc-number">3.</span> <span class="toc-text">本地同步播放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最终实现效果"><span class="toc-number">4.</span> <span class="toc-text">最终实现效果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可视化gstreamer-pipeline"><span class="toc-number">5.</span> <span class="toc-text">可视化gstreamer pipeline</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
