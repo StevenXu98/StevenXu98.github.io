@@ -194,6 +194,21 @@
     <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
     <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
     
+        <!-- algolia -->
+        <script>
+            
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"Search for Posts","hits_empty":"We did not find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}')
+
+            var algolia = {
+                applicationID: 'Z5IROU8L6D',
+                apiKey: 'b481006afe9b06dd5f09f0db0e66f4ce',
+                indexName: 'hexo',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    
     <!-- fancybox -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
     <!-- 百度统计  -->
@@ -353,13 +368,13 @@
                 <span>技能树</span>
         </a>
         <div class="abstract-content">
-            C/C++指针和内存Linux C编程一站式学习回调函数是什么在C++中子类继承和调用父类的构造函数方法c++工程实践
+            本文为个人资料收集页面，链接指向曾经看过的感觉有用的文章目标是做成类似知道创宇技能树那样的吧能给入坑嵌入式或是入坑计算机的提供一些帮助
+C/C++指针和内存Linux C编程一站式学习回调函数是什么在C++中子类继承和调用父类的构造函数方法c++工程实践
 嵌入式工具keil系列教程
 外设接口协议CAN总线CAN总线学习笔记（1）- CAN基础知识CAN总线学习笔记（2）- CAN协议数据帧与遥控帧CAN入门书
 工程实践Cortex-A8处理器memcpy的优化方案基于Linux的视频传输系统
 操作系统内存管理逻辑地址、虚拟地址、物理地址以及内存管理
-网络编程Linux的SOCKET编程详解一文看懂https
-
+网络编程Linux的SOCKET编程详...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -548,6 +563,10 @@
         </div>
         <!-- search  -->
         
+            <div class="site-search popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
+        
     </div>
     
     <div class="post-archive">
@@ -652,6 +671,29 @@ jsonContent:
     </script>
     <script src="/scripts/main.js"></script>
     <!-- algolia -->
+    
+        <div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="iconfont-archer">&#xe609;</i>
+    </span>
+  </div>
+</div>
+        <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.8.0/dist/instantsearch.min.js" defer></script>
+        <script src="/scripts/search.js" defer></script>
     
     <!-- busuanzi  -->
     
