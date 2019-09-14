@@ -361,25 +361,28 @@
     
     
     <article class="index-post">
-        <a class="abstract-title" href="/2018/12/23/SkillTree/">
+        <a class="abstract-title" href="/2019/07/02/TimerList/">
             
-                <span class="stick-top iconfont-archer">&#xe63d;</span>
-                
-                <span>技能树</span>
+                <span>timer_list结构体</span>
         </a>
         <div class="abstract-content">
-            本文为个人资料收集页面，链接指向曾经看过的感觉有用的文章目标是做成类似知道创宇技能树那样的吧能给入坑嵌入式或是入坑计算机的提供一些帮助
-通用技能重要开源协议的比较(BSD,Apache,GPL,LGPL,MIT) – 整理
-C/C++指针和内存Linux C编程一站式学习回调函数是什么在C++中子类继承和调用父类的构造函数方法C++工程实践C++11新特性之九——function、bind以及lamda表达式总结Boost C++ 库 教程移动语义（move semantic）和完美转发（perfect forward）
-Linux工具linux 下使用 tc 模拟网络延迟和丢包
-Dri...
+            定时器timer_list的变化
+dummynet编译的时候报了这么个错误。timer_list是linux kernel中的定时器结构体。
+在2.3版本之后的定时器一般默认指的是动态定时器，只需要初始化一个超时时间，激活后在到期的时候就会触发设置的函数。定时器可以在运行之后就撤销，不必周期运行。
+linux4.15之前1234567struct timer_list &#123;	struct hlist_node	entry; //定时器链表入口	unsigned long	expires;//以jiffies为单位的超时值	void	(*function)(unsigned lon...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/12/23</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/02</span>
             </div>
             <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Linux内核">Linux内核</a>
+    
+</div>
             
         </div>
     </article>

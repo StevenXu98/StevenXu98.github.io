@@ -361,6 +361,38 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href="/2019/07/02/TimerList/">
+            
+                <span>timer_list结构体</span>
+        </a>
+        <div class="abstract-content">
+            定时器timer_list的变化
+dummynet编译的时候报了这么个错误。timer_list是linux kernel中的定时器结构体。
+在2.3版本之后的定时器一般默认指的是动态定时器，只需要初始化一个超时时间，激活后在到期的时候就会触发设置的函数。定时器可以在运行之后就撤销，不必周期运行。
+linux4.15之前1234567struct timer_list &#123;	struct hlist_node	entry; //定时器链表入口	unsigned long	expires;//以jiffies为单位的超时值	void	(*function)(unsigned lon...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/02</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Linux内核">Linux内核</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href="/2019/04/05/gst-launch/">
             
                 <span>gstreamer-RTP测试脚本</span>
@@ -627,9 +659,18 @@ Dri...
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 4
+        Total : 5
         </div>
         <!-- search  -->
         
@@ -646,6 +687,11 @@ Dri...
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span><a class="archive-post-title" href="/2019/07/02/TimerList/">timer_list结构体</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -680,6 +726,8 @@ Dri...
   </div>
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Linux内核"><span class="iconfont-archer">&#xe606;</span>Linux内核</span>
     
         <span class="sidebar-tag-name" data-tags="实时音视频"><span class="iconfont-archer">&#xe606;</span>实时音视频</span>
     

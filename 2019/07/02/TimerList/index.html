@@ -22,7 +22,7 @@
     <meta name="description" content>
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Little Deamon&#39;s blog</title>
+    <title>timer_list结构体 · Little Deamon&#39;s blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -218,12 +218,23 @@
 </head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Little Deamon.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">timer_list结构体</a>
+            </div>
+    </div>
     
     <a class="home-link" href="/">Little Deamon.</a>
 </header>
@@ -235,24 +246,74 @@
 
 
 
+
+height:50vh;
 ">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg-my.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            timer_list结构体
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Linux内核">Linux内核</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">870</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/07/02</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -353,39 +414,81 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href="/2018/12/23/SkillTree/">
-            
-                <span class="stick-top iconfont-archer">&#xe63d;</span>
-                
-                <span>技能树</span>
-        </a>
-        <div class="abstract-content">
-            本文为个人资料收集页面，链接指向曾经看过的感觉有用的文章目标是做成类似知道创宇技能树那样的吧能给入坑嵌入式或是入坑计算机的提供一些帮助
-通用技能重要开源协议的比较(BSD,Apache,GPL,LGPL,MIT) – 整理
-C/C++指针和内存Linux C编程一站式学习回调函数是什么在C++中子类继承和调用父类的构造函数方法C++工程实践C++11新特性之九——function、bind以及lamda表达式总结Boost C++ 库 教程移动语义（move semantic）和完美转发（perfect forward）
-Linux工具linux 下使用 tc 模拟网络延迟和丢包
-Dri...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/12/23</span>
-            </div>
-            <!-- tags  -->
-            
-        </div>
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="定时器timer-list的变化"><a href="#定时器timer-list的变化" class="headerlink" title="定时器timer_list的变化"></a>定时器timer_list的变化</h1><p><img src="https://i.loli.net/2019/04/24/5cbfc32d934a7.png" alt></p>
+<p>dummynet编译的时候报了这么个错误。timer_list是linux kernel中的定时器结构体。</p>
+<p>在2.3版本之后的定时器一般默认指的是动态定时器，只需要初始化一个超时时间，激活后在到期的时候就会触发设置的函数。定时器可以在运行之后就撤销，不必周期运行。</p>
+<h2 id="linux4-15之前"><a href="#linux4-15之前" class="headerlink" title="linux4.15之前"></a>linux4.15之前</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timer_list</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span>	<span class="title">entry</span>;</span> <span class="comment">//定时器链表入口</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>	expires;<span class="comment">//以jiffies为单位的超时值</span></span><br><span class="line">	<span class="keyword">void</span>	(*function)(<span class="keyword">unsigned</span> <span class="keyword">long</span>);<span class="comment">//超时后的处理函数</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>	data;<span class="comment">//传给函数的参数</span></span><br><span class="line">	u32	flags;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是linux4.14中的定时器结构体(精简)</p>
+<p>expires字段包含计时器的到期时间（以jiffies为单位）；超时到期后将会调用function。我们可以手动填写timer_list结构，但更常见的是使用<code>setup_timer()</code>宏：<code>void setup_timer(timer, function, data);</code></p>
+<p>这个api存在很多问题，data字段不必要的膨胀了timer_list结构体，同时作为一个无符号整形，可以抵御任何类型的类型检查，例如这个值被转换成指针的情况并不少见。在比较新的内核api中更多的是放弃数据字段，而是将指针传递给相关的结构体。</p>
+<h2 id="linux4-15"><a href="#linux4-15" class="headerlink" title="linux4.15"></a>linux4.15</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timer_list</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span>	<span class="title">entry</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		expires;</span><br><span class="line">	<span class="keyword">void</span>			(*function)(struct timer_list *);</span><br><span class="line">	u32			flags;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在4.15版本的内核中，timer_list正式舍弃的旧的timer_list结构体，也就是正式取消了data字段。而如何向函数传递参数，这里用到的是和内核链表同样的思想。将timer_list结构体嵌入一个更大的结构中，然后用container_of()的内核宏可以取得更大结构体中data字段。</p>
+<h2 id="代码说明"><a href="#代码说明" class="headerlink" title="代码说明"></a>代码说明</h2><p>尝试用一段简单的代码demo来解释这个行为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> offsetof(TYPE,MEMBER)   ((size_t) &amp;((TYPE *)0)-&gt;MEMBER)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> container_of(PTR,TYPE,MEMBER)    (&#123;  \</span></span><br><span class="line">    <span class="function"><span class="keyword">const</span> <span class="title">typeof</span><span class="params">(((TYPE *)<span class="number">0</span>)-&gt;MEMBER)</span> *__mptr</span>=(PTR);  \</span><br><span class="line">    (TYPE *) ((<span class="keyword">char</span> *)__mptr - offsetof(TYPE,MEMBER)); &#125;)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timer_list_old</span>&#123;</span></span><br><span class="line">    <span class="keyword">void</span> (* function)(<span class="keyword">unsigned</span> <span class="keyword">long</span>);</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> data;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timer_list_new</span>&#123;</span></span><br><span class="line">    <span class="keyword">void</span> (* function)(struct timer_list_new *);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">use_timer_new</span>&#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timer_list_new</span> <span class="title">timer</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PrintDataNew</span><span class="params">(struct timer_list_new * temp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">use_timer_new</span> *<span class="title">ptimer</span> = <span class="title">container_of</span>(<span class="title">temp</span>, <span class="title">struct</span> <span class="title">use_timer_new</span>, <span class="title">timer</span>);</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"new data = %ld\n"</span>, ptimer-&gt;data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PrintDataOld</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"old data = %ld\n"</span>, data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">use_timer_new</span> <span class="title">tnew</span>;</span></span><br><span class="line">    tnew.timer.function = (<span class="keyword">void</span> *)PrintDataNew;</span><br><span class="line">    tnew.data = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timer_list_old</span> <span class="title">told</span>;</span></span><br><span class="line">    told.function = (<span class="keyword">void</span> *)PrintDataOld;</span><br><span class="line">    told.data = <span class="number">456</span>;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    tnew.timer.function(&amp;tnew.timer);</span><br><span class="line">    told.function(told.data);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里我们假设我们只有指向timer_list的指针。老的方法，是直接取出timer_list中的data传入timer_list中的注册的function。新的方法向function传入指向自己的指针。然后通过<code>container_of()</code>宏，取得指向包含timer_list结构体的大结构体的指针。</p>
+<blockquote>
+<p>container_of()宏的作用是通过一个结构里某个成员的地址，结构的类型，成员的字段名取得这个结构的地址。简单拿来说，只要知道结构的实现，某个成员的地址，就可以获得结构的地址。</p>
+</blockquote>
+<p>最后至于dummynet当然是弃用了，其中的逻辑也不是修改一个结构体的用法就能修正的，作为一个年久失修的内核模块项目未来空闲了可以来弄弄。至于替代品自然是选用了tc，虽然只能模拟上行丢包，但只需要在双端都配置上tc，也可以模拟收发丢包。</p>
+<p>sudo tc qdisc replace dev wlp58s0 root netem loss 10%</p>
+<p>关于timer_list修改的延伸阅读<br><a href="https://lwn.net/Articles/735887/" target="_blank" rel="noopener">https://lwn.net/Articles/735887/</a><br><a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=686fef928bba6be13cabe639f154af7d72b63120" target="_blank" rel="noopener">timer: Prepare to change timer callback argument type</a></p>
+
     </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://swapx.space">Rukia Alice</a>
+            </p><p>原文链接：<a href="http://swapx.space/2019/07/02/TimerList/">http://swapx.space/2019/07/02/TimerList/</a>
+            </p><p>发表日期：<a href="http://swapx.space/2019/07/02/TimerList/">July 2nd 2019, 8:49:50 pm</a>
+            </p><p>更新日期：<a href="http://swapx.space/2019/07/02/TimerList/">September 14th 2019, 8:50:21 pm</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/04/05/gst-launch/" title="gstreamer-RTP测试脚本">
+                    <div class="prevTitle">gstreamer-RTP测试脚本</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MzQ4OC8yMDAyOA==">
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -478,6 +581,24 @@ Dri...
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#定时器timer-list的变化"><span class="toc-number">1.</span> <span class="toc-text">定时器timer_list的变化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux4-15之前"><span class="toc-number">1.1.</span> <span class="toc-text">linux4.15之前</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux4-15"><span class="toc-number">1.2.</span> <span class="toc-text">linux4.15</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码说明"><span class="toc-number">1.3.</span> <span class="toc-text">代码说明</span></a></li></ol></li></ol>
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -687,6 +808,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>
