@@ -22,7 +22,7 @@
     <meta name="description" content>
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>关于我的那些事 · Little Deamon&#39;s blog</title>
+    <title>Little Deamon&#39;s blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -218,8 +218,6 @@
 </head>
 
     
-        <body class="about-body">
-    
     
 <header class="header">
 
@@ -237,22 +235,16 @@
 
 
 
-
-height:50vh;
 ">
     
     <!-- 主页  -->
-    
-    
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/about-bg-my.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
-            
-            关于我的那些事
             
         </h1>
         <!-- 副标题 -->
@@ -361,45 +353,41 @@ height:50vh;
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <!-- 不可以删除，否则会调用post的layout  -->
-<main class="main about-page">
-    <article class="article-entry">
-        <p>奋斗在一线的代码搬运工见习生，本行嵌入式软件，目标成为<del>精灵宝可梦大</del>全栈工程师</p>
-<p>μ’s / aqours双推，新番追番党，基本不更新的mmd up主，音游苦手，初见Arcaea</p>
-<p>Little Deamon源于aikyan在谷歌翻译上把小恶魔little demon错翻译成小守护进程little deamon（霓虹人神奇的罗马音与英文兼容性问题 （</p>
-<p>头像角色出自漆黑的子弹，缇娜·斯普朗特。大概是那种平时很懒散但是干活的时候总能很好的完成任务的感觉（</p>
-<p>头图id：待更新 (</p>
-<p>本站是一个属于个人的blog，由hexo，archer主题，gitpage强力驱动。</p>
-<hr>
-<h2 id="个体技术栈"><a href="#个体技术栈" class="headerlink" title="个体技术栈"></a>个体技术栈</h2><h4 id="专业相关"><a href="#专业相关" class="headerlink" title="专业相关"></a>专业相关</h4><ul>
-<li>c （假装精通）</li>
-<li>c艹（半生不熟）</li>
-<li>github（表面用户）</li>
-<li>Linux Kernel（略读内核）</li>
-<li>Linux Driver（部分实现）</li>
-<li>视频编解码（正在学习）</li>
-<li>实时音视频传输（同步进行）</li>
-<li>… …</li>
-</ul>
-<h4 id="非专业相关"><a href="#非专业相关" class="headerlink" title="非专业相关"></a>非专业相关</h4><ul>
-<li>PR（无粉up主）</li>
-<li>mmd（梦里k帧）</li>
-<li>PS（小学水平）</li>
-<li>… …</li>
-</ul>
-<hr>
-<h2 id="Tracking"><a href="#Tracking" class="headerlink" title="Tracking"></a>Tracking</h2><h4 id="技能树"><a href="#技能树" class="headerlink" title="技能树"></a>技能树</h4><p>基于s3c2440的linux内核/驱动开发<br>基于gstreamer与websocketpp的实时音视频传输 </p>
-<h4 id="个人足迹"><a href="#个人足迹" class="headerlink" title="个人足迹"></a>个人足迹</h4><p>深圳市荔园小学<br>深圳市实验初中<br>深圳市宝安中学<br>UESTC [NOW]<br>UISEE </p>
-<h4 id="五年目标"><a href="#五年目标" class="headerlink" title="五年目标"></a>五年目标</h4><ul>
-<li style="list-style: none"><input type="checkbox"> 完成Linux铁三角学习</li>
-<li style="list-style: none"><input type="checkbox"> 入职深圳的企业</li>
-<li style="list-style: none"><input type="checkbox"> 顺利毕业</li>
-<li style="list-style: none"><input type="checkbox"> 健康体质</li>
-<li style="list-style: none"><input type="checkbox" checked> <del>找到女朋友</del></li>
-<li style="list-style: none"><input type="checkbox"> 未完待续… …</li>
-</ul>
-
+            <main class="main index-page">
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href="/2019/06/11/retransmission/">
+            
+                <span>gstreamer rtp/srtp重传</span>
+        </a>
+        <div class="abstract-content">
+            初级调研得知kurento作为一个较为成熟的流媒体服务器具有了一定的错误处理和恢复机制。同时gstreamer也确认有相应的重传插件可供使用。根据一段时间的调试，现在基本实现rtp和srtp下模拟30%丢包率也能保证的正常传输。下面来说说具体实现的要点
+sdpsdp是一种回话描述协议格式，用于描述流媒体的初始化参数。
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546sdpOffer.append("v=0\r\n");sdpOffer.append("o=- 0 0 IN...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/06/11</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="实时音视频">实时音视频</a>
+    
+</div>
+            
+        </div>
     </article>
+    
+    <!-- paginator  -->
+    
 </main>
             <!-- profile -->
             

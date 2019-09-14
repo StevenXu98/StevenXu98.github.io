@@ -361,6 +361,37 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href="/2019/06/11/retransmission/">
+            
+                <span>gstreamer rtp/srtp重传</span>
+        </a>
+        <div class="abstract-content">
+            初级调研得知kurento作为一个较为成熟的流媒体服务器具有了一定的错误处理和恢复机制。同时gstreamer也确认有相应的重传插件可供使用。根据一段时间的调试，现在基本实现rtp和srtp下模拟30%丢包率也能保证的正常传输。下面来说说具体实现的要点
+sdpsdp是一种回话描述协议格式，用于描述流媒体的初始化参数。
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546sdpOffer.append("v=0\r\n");sdpOffer.append("o=- 0 0 IN...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/06/11</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="实时音视频">实时音视频</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href="/2019/04/05/gst-launch/">
             
                 <span>gstreamer-RTP测试脚本</span>
@@ -577,9 +608,26 @@ mediainfo读出的相关信息存在什么地方  直达解答
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 5
+        Total : 6
         </div>
         <!-- search  -->
         
@@ -600,6 +648,11 @@ mediainfo读出的相关信息存在什么地方  直达解答
     
         <li class="archive-post-item">
             <span class="archive-post-date">07/02</span><a class="archive-post-title" href="/2019/07/02/TimerList/">timer_list结构体</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href="/2019/06/11/retransmission/">gstreamer rtp/srtp重传</a>
         </li>
     
     
@@ -636,11 +689,11 @@ mediainfo读出的相关信息存在什么地方  直达解答
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="猴子也能懂的系列"><span class="iconfont-archer">&#xe606;</span>猴子也能懂的系列</span>
+    
         <span class="sidebar-tag-name" data-tags="Linux内核"><span class="iconfont-archer">&#xe606;</span>Linux内核</span>
     
         <span class="sidebar-tag-name" data-tags="实时音视频"><span class="iconfont-archer">&#xe606;</span>实时音视频</span>
-    
-        <span class="sidebar-tag-name" data-tags="猴子也能懂的系列"><span class="iconfont-archer">&#xe606;</span>猴子也能懂的系列</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
